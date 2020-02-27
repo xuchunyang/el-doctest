@@ -1,6 +1,4 @@
-# el-doctest
-
-Run tests in Elisp docstring.
+# el-doctest - Run tests in Elisp docstring
 
 ## Example
 
