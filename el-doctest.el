@@ -89,6 +89,8 @@
   (cl-mapcan #'el-doctest--function-tests
              (el-doctest--feature-functions feature)))
 
+;; XXX batch
+;; XXX better report
 (defun el-doctest-check-feature (feature)
   (interactive (list (read-feature "Check feature: ")))
   (let* ((tests (el-doctest--feature-tests feature))
