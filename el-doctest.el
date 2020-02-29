@@ -89,13 +89,12 @@
   (cl-mapcan #'el-doctest--function-tests
              (el-doctest--feature-functions feature)))
 
-;; XXX batch
-;; XXX better report
 (defun el-doctest-check-feature (feature)
+  "Check functions defined in FEATURE."
   (interactive (list (read-feature "Check feature: ")))
   (let* ((tests (el-doctest--feature-tests feature))
          (total (length tests))
-         passes)
+         passed)
     (cl-loop for test in tests
              for i from 1
              for progress = (format "[%d/%d]" i total)
@@ -106,7 +105,7 @@
                   (`(nil ,got)
                    (cond
                     ((equal got want)
-                     (push test passes)
+                     (push test passed)
                      (message "%s %s pass" progress (car expr)))
                     (t
                      (let ((print-quoted t))
@@ -117,9 +116,29 @@
                               progress
                               expr (error-message-string err))))))))
     (message "Total: %d, Pass: %d, Fail: %d"
-             total
-             (length passes)
-             (- total (length passes)))))
+             total (length passed) (- total (length passed)))
+    (list    total (length passed) (- total (length passed)))))
+
+;; emacs -Q --batch -L . -l el-doctest -f el-doctest-batch-check-feature el-doctest
+(defun el-doctest-batch-check-feature ()
+  (unless noninteractive
+    (user-error "This function is only for use in batch mode"))
+  (let ((total 0)
+        (passed 0)
+        (failed 0)
+        (features 0))
+    (dolist (feature (delete-dups (mapcar #'intern command-line-args-left)))
+      (cl-incf features)
+      (pcase-exhaustive (el-doctest-check-feature feature)
+        (`(,total_ ,passed_ ,failed_)
+         (cl-incf total  total_)
+         (cl-incf passed passed_)
+         (cl-incf failed failed_)))
+      (message nil))
+    (if (zerop failed)
+        (message "Test passed")
+      (message "Test failed"))
+    (kill-emacs (if (zerop failed) 0 1))))
 
 (provide 'el-doctest)
 ;;; el-doctest.el ends here
