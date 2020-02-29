@@ -17,7 +17,7 @@ For example, with this Emacs Lisp file, `M-x el-doctest-check-feature foo` will 
 (provide 'foo)
 ```
 
-## How to write test?
+## How to write tests?
 
 Use this format:
 
@@ -49,3 +49,17 @@ whitespaces before `(`, not `\`.
 >
 >
 > [(elisp) Documentation Tips](https://www.gnu.org/software/emacs/manual/html_node/elisp/Documentation-Tips.html)
+
+## How to run tests?
+
+### Run tests interactively
+
+use `M-x el-doctest-check-feature FEATURE` to check functions defined in `FEATURE`.
+
+### Run tests in batch mode
+
+Use `el-doctest-batch-check-feature`, e.g., to check features `foo` and `bar`
+
+``` shell
+emacs -Q --batch -L /path/to/el-doctest -l el-doctest -f el-doctest-batch-check-feature foo bar
+```
