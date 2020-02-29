@@ -21,3 +21,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Byte compile
       run: emacs -Q --batch -L . --eval "(setq byte-compile-error-on-warn t)" -f batch-byte-compile el-doctest.el
+    - name: Try el-doctest-batch-check-feature
+      run: emacs -Q --batch -L . -l el-doctest f el-doctest-batch-check-feature el-doctest

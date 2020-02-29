@@ -43,9 +43,7 @@
   (el-doctest--length '(a b))
   ;; => 2
 "
-  (pcase (length lst)
-    (1 456)
-    (x x)))
+  (length lst))
 
 (defun el-doctest--eval (expr)
   (let* ((err nil)
